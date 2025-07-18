@@ -26,7 +26,12 @@ def generate(
     df.to_csv(file_path, index= False)
 
     print(f"Synthetic dataset saved to: {file_path}")
-    return file_path
+
+    latest_path = os.path.join(dest_path, "latest.csv")
+    df.to_csv(latest_path, index= False)
+    print(f"Also saved a copy to: {latest_path}")
+
+    return file_path, latest_path
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser(description= "Generate synthetic data for regression")
