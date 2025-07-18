@@ -38,8 +38,8 @@ if __name__ == "__main__":
     p.add_argument("--dest", "-d", default= "data/raw/", help= "Output folder")
     p.add_argument("--samples", "-n", type= int, default= 1000, help= "Number of samples")
     p.add_argument("--features", "-f", type= int, default= 5, help= "Number of features")
-    p.add_argument("--noise", type= float, default= 0.1, help= "Noise level")
-    p.add_argument("--seed", type= int, default= 50, help= "Random state")
+    p.add_argument("--noise", "-no", type= float, default= 0.1, help= "Noise level")
+    p.add_argument("--seed", "-s", type= int, default= 50, help= "Random state")
     args = p.parse_args()
 
     generate(
