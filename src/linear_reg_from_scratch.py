@@ -68,3 +68,16 @@ class LinearRegFromScratch:
     def predict(self, X):
         X = np.array(X, dtype= float)
         return np.dot(X, self.weights) + self.bias
+    
+    def __repr__(self):
+        
+        w = np.round(self.weights, 4) if self.weights is not None else None
+        b = round(self.bias, 4) if self.bias is not None else None
+        return(
+            f"{self.__class__.__name__}(learning rate = {self.learning_rate}, "
+            f"n iterations = {self.n_iterations}, loss tolerance = {self.tol_loss})\n"
+            f"weights = {w}\n"
+            f"bias = {b}"
+        )
+    
+    __str__ = __repr__
