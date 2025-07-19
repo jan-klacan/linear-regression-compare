@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Clean jupyter notebooks except for the outputs
+*.ipynb filter=clean-notebook
