@@ -10,12 +10,16 @@ def preprocess(
         test_size= 0.2,
         random_state= 50
 ):
+    
+    # Ensure that the output folder exists
     os.makedirs(processed_dest_path, exist_ok= True)
 
+    # Load raw data
     df = pd.read_csv(raw_csv)
     X = df.drop("target", axis= 1).values
     y = df["target"].values
 
+    # Train-test split
     X_train, X_test, y_train, y_test = train_test_split(
         X,
         y,
@@ -23,23 +27,43 @@ def preprocess(
         random_state= random_state
     )
 
+    # Scale data
     scaler = StandardScaler()
     X_train_scaled = scaler.fit_transform(X_train)
     X_test_scaled = scaler.transform(X_test)
 
+    # Build dataframes
     train_df = pd.DataFrame(X_train_scaled, columns= df.columns[: -1])
     train_df["target"] = y_train
     test_df = pd.DataFrame(X_test_scaled, columns= df.columns[: -1])
     test_df["target"] = y_test
 
-    train_path = os.path.join(processed_dest_path, "train.csv")
-    test_path = os.path.join(processed_dest_path, "test.csv")
+    # Get base name from the raw file name
+    name_base = os.path.splitext(os.path.basename(raw_csv))[0]
 
-    train_df.to_csv(train_path, index= False)
-    test_df.to_csv(test_path, index= False)
+    # Paths for versioned files
+    train_versioned = os.path.join(processed_dest_path, f"train_{name_base}.csv")
+    test_versioned = os.path.join(processed_dest_path, f"test_{name_base}.csv")
 
-    print(f"Saved train dataset to: {train_path}")
-    print(f"Saved test dataset to: {test_path}")
+    # Paths for "latest" files
+    train_latest = os.path.join(processed_dest_path, "train_latest.csv")
+    test_latest = os.path.join(processed_dest_path, "test_latest.csv")
+
+    # Save versioned files
+    train_df.to_csv(train_versioned, index= False)
+    test_df.to_csv(test_versioned, index= False)    
+
+    # Overwrite the "latest" files 
+    train_df.to_csv(train_latest, index= False)
+    test_df.to_csv(test_latest, index= False)
+
+    # Print report
+    print(f"Saved train dataset to: {train_versioned}")
+    print(f"Saved test dataset to: {test_versioned}")
+    print(f"Also updated train latest: {train_latest}")
+    print(f"Also updated test latest: {test_latest}")
+
+    return train_versioned, test_versioned, train_latest, test_latest
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser(description= "Preprocess synthetic data generated for regression")
