@@ -1,6 +1,7 @@
 import os
 import argparse
 import pandas as pd
+import json
 from sklearn.datasets import make_regression
 
 def generate(
@@ -31,7 +32,15 @@ def generate(
     df.to_csv(latest_path, index= False)
     print(f"Also saved a copy to: {latest_path}")
 
-    return file_path, latest_path
+    meta = {
+        "base": os.path.splitext(os.path.basename(file_path))[0]
+    }
+    meta_path = os.path.join(dest_path, "latest_meta.json")
+    with open(meta_path, "w") as f:
+        json.dump(meta, f, indent= 2)
+    print(f"Metadata for the base file name saved to: {meta_path}")
+
+    return file_path, latest_path, meta_path
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser(description= "Generate synthetic data for regression")
