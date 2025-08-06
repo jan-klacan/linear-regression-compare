@@ -1,0 +1,5 @@
+{
+  "Model": "sklearn LinearRegression",
+  "MSE": 0.009819432407850449,
+  "R-Squared": 0.999999292472886
+}
